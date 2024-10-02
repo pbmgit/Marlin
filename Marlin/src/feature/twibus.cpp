@@ -84,8 +84,11 @@ void TWIBus::send() {
   debug(F("send"), addr);
 
   Wire.beginTransmission(I2C_ADDRESS(addr));
+  debug(F("After Beginning"), buffer_s);
   Wire.write(buffer, buffer_s);
+  debug(F("After Write"),addr);
   Wire.endTransmission();
+  debug(F("After endTransmission"),addr);
 
   reset();
 }

@@ -67,6 +67,14 @@
 // @section machine
 
 // Choose the name from boards.h that matches your setup
+//BeerMKR will either be EFB or EEB
+//Extruder 1 represents upper heater and will have its own temperature measurement
+//Bed will be the thermoelectric and main bag temp sensor
+//Extruder 2 (not yet implemented) will represent the bottom heater limited to 50%
+//Thermoelectric fan has been wired to Peltier Power
+//todo: Separate temperature controlled thermo fan
+//Power Supply fan in BeerMKR has operated when not in quiescent mode
+//Not sure how to translate that to Marlin other than "print started"
 #ifndef MOTHERBOARD
   #define MOTHERBOARD BOARD_RAMPS_14_EFB
 #endif
@@ -133,7 +141,7 @@
 //#define MACHINE_UUID "00000000-0000-0000-0000-000000000000"
 
 // @section stepper drivers
-
+//BeerMKR has no motion control, but removing the references has not been done
 /**
  * Stepper Drivers
  *
@@ -218,6 +226,7 @@
 
 // This defines the number of extruders
 // :[0, 1, 2, 3, 4, 5, 6, 7, 8]
+//For the BeerMKR Extruder 1 will be the upper heaters
 #define EXTRUDERS 1
 
 // Generally expected filament diameter (1.75, 2.85, 3.0, ...). Used for Volumetric, Filament Width Sensor, etc.
@@ -571,7 +580,7 @@
 #define TEMP_SENSOR_5 0
 #define TEMP_SENSOR_6 0
 #define TEMP_SENSOR_7 0
-#define TEMP_SENSOR_BED 1000
+#define TEMP_SENSOR_BED 4
 #define TEMP_SENSOR_PROBE 0
 #define TEMP_SENSOR_CHAMBER 0
 #define TEMP_SENSOR_COOLER 0
@@ -600,13 +609,13 @@
 #if HAS_E_TEMP_SENSOR
   #define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
   #define TEMP_WINDOW                  0  // (°C) Temperature proximity for the "temperature reached" timer
-  #define TEMP_HYSTERESIS              1  // (°C) Temperature proximity considered "close enough" to the target
+  #define TEMP_HYSTERESIS              0  // (°C) Temperature proximity considered "close enough" to the target
 #endif
 
 #if TEMP_SENSOR_BED
   #define TEMP_BED_RESIDENCY_TIME     10  // (seconds) Time to wait for bed to "settle" in M190
   #define TEMP_BED_WINDOW              0  // (°C) Temperature proximity for the "temperature reached" timer
-  #define TEMP_BED_HYSTERESIS          1  // (°C) Temperature proximity considered "close enough" to the target
+  #define TEMP_BED_HYSTERESIS          0  // (°C) Temperature proximity considered "close enough" to the target
 #endif
 
 #if TEMP_SENSOR_CHAMBER
@@ -633,7 +642,7 @@
 
 // Below this temperature the heater will be switched off
 // because it probably indicates a broken thermistor wire.
-#define HEATER_0_MINTEMP   5
+#define HEATER_0_MINTEMP   -20
 #define HEATER_1_MINTEMP   5
 #define HEATER_2_MINTEMP   5
 #define HEATER_3_MINTEMP   5
@@ -664,8 +673,8 @@
  * (especially before PID tuning). Setting the target temperature too close to MAXTEMP guarantees
  * a MAXTEMP shutdown! Use these values to forbid temperatures being set too close to MAXTEMP.
  */
-#define HOTEND_OVERSHOOT 15   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
-#define BED_OVERSHOOT    10   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
+#define HOTEND_OVERSHOOT 0   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
+#define BED_OVERSHOOT    0   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
 #define COOLER_OVERSHOOT  2   // (°C) Forbid temperatures closer than OVERSHOOT
 
 //===========================================================================
@@ -811,7 +820,7 @@
  */
 #ifdef HAS_PELTIER
   #define PELTIER_PIN 47
-  #define PELTIER_PIN_INVERT true
+  #define PELTIER_PIN_INVERT false
   #define Peltier_FAN_PIN 4
 //todo:  Define Peltier Control Pin
 //todo: Define Peltier Pin Invert
@@ -942,7 +951,7 @@
  * details can be tuned in Configuration_adv.h
  */
 
-#define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
+//#define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
 //define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
 #define THERMAL_PROTECTION_CHAMBER // Enable thermal protection for the heated chamber
 #define THERMAL_PROTECTION_COOLER  // Enable thermal protection for the laser cooling
